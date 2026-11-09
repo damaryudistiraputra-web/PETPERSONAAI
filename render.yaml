@@ -1,0 +1,35 @@
+# PawRoyalty demo deployment. Do not commit provider keys or Firebase credentials.
+# Generation is PAUSED until durable storage, Auth, and App Check are configured.
+services:
+  - type: web
+    name: pawroyalty-api-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT --no-proxy-headers
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: REQUIRE_APP_CHECK
+        value: "true"
+      - key: IMAGE_PROVIDER
+        value: cloudflare
+      - key: ENABLE_PAID_IMAGE_GENERATION
+        value: "false"
+      - key: ENABLE_FREE_GEMINI_CAPTIONS
+        value: "false"
+      - key: DAILY_CREDITS
+        value: "5"
+      - key: GLOBAL_DAILY_LIMIT
+        value: "0"
+      - key: DAILY_IP_LIMIT
+        value: "0"
+      - key: SQLITE_PATH
+        value: /tmp/pawroyalty.db
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: CF_ACCOUNT_ID
+        sync: false
+      - key: CF_API_TOKEN
+        sync: false
